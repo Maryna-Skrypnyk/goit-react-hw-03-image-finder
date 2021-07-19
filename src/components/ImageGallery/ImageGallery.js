@@ -8,8 +8,8 @@ import styles from './ImageGallery.module.scss';
 
 const ImageGallery = ({ images }) => {
   <ul className={styles.ImageGallery}>
-    {images.map(({ id, image }) => (
-      <ImageGalleryItem key={id} image={image} />
+    {images.map(({ id, image, onClickItem }) => (
+      <ImageGalleryItem key={id} image={image} onClick={onClickItem} />
     ))}
   </ul>;
 };
@@ -19,6 +19,7 @@ ImageGallery.propTypes = {
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       //   image: PropTypes.string.isRequired,
+      onClickItem: PropTypes.func.isRequired,
     }),
   ).isRequired,
 };

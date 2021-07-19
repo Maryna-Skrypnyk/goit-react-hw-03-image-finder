@@ -2,142 +2,95 @@ import React, { Component } from 'react';
 
 import Layout from '../components/Layout';
 
-import Searchbar from './Searchbar';
-import ImageGallery from './ImageGallery';
+// import Searchbar from './Searchbar';
+// import ImageGallery from './ImageGallery';
 // import Loader from './Loader';
 import Modal from './Modal';
-import Button from './Button';
+import ButtonIcon from './ButtonIcon';
+import { HiOutlineX } from 'react-icons/hi';
 
-import Loader from 'react-loader-spinner';
+// import Button from './Button';
 
-import './App.module.scss';
+// import Loader from 'react-loader-spinner';
 
-// class App extends Component {
-//   // state = {
-//   //   images: [],
-//   //   // filter: '',
-//   // };
+// import PropTypes from 'prop-types';
 
-//   // addSearch = ({ image }) => {
-//   //   // const { images } = this.state;
+import styles from './App.module.scss';
 
-//   //   this.setState(({ images }) => ({
-//   //     images: [image, ...images],
-//   //   }));
-//   // };
+class App extends Component {
+  state = {
+    images: [],
+    largeImageURL: '',
+    showModal: true,
+  };
 
-//   // changeFilter = e => {
-//   //   this.setState({ filter: e.target.value });
-//   // };
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({
+      showModal: !showModal,
+    }));
+  };
 
-//   // getVisibleContacts = () => {
-//   //   const { contacts, filter } = this.state;
+  // addSearch = ({ image }) => {
+  //   // const { images } = this.state;
 
-//   //   const normalizedFilter = filter.toLowerCase();
-//   //   return contacts.filter(contact =>
-//   //     contact.name.toLowerCase().includes(normalizedFilter),
-//   //   );
-//   // };
+  //   this.setState(({ images }) => ({
+  //     images: [image, ...images],
+  //   }));
+  // };
 
-//   // getVisibleContactsSortByName = () => {
-//   //   const visibleContacts = this.getVisibleContacts();
+  // componentDidMount() {
+  //   const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
+  //   if (parsedContacts) {
+  //     this.setState({ contacts: parsedContacts });
+  //   }
+  // }
 
-//   //   const visibleContactsSortByName = visibleContacts.sort((a, b) => {
-//   //     const nameA = a.name.toUpperCase();
-//   //     const nameB = b.name.toUpperCase();
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.contacts !== prevState.contacts) {
+  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+  //   }
+  // }
 
-//   //     if (nameA < nameB) {
-//   //       return -1;
-//   //     }
-//   //     if (nameA > nameB) {
-//   //       return 1;
-//   //     }
-//   //     return 0;
-//   //   });
+  render() {
+    const { images, largeImageURL, showModal } = this.state;
 
-//   //   return visibleContactsSortByName;
-//   // };
+    return (
+      <Layout>
+        {/* <Searchbar /> */}
 
-//   // deleteContact = contactId => {
-//   //   this.setState(({ contacts }) => ({
-//   //     contacts: contacts.filter(contact => contact.id !== contactId),
-//   //   }));
-//   // };
+        {/* <ImageGallery images={images} onClick={this.toggleModal} /> */}
 
-//   // componentDidMount() {
-//   //   const parsedContacts = JSON.parse(localStorage.getItem('contacts'));
-//   //   if (parsedContacts) {
-//   //     this.setState({ contacts: parsedContacts });
-//   //   }
-//   // }
-
-//   // componentDidUpdate(prevProps, prevState) {
-//   //   if (this.state.contacts !== prevState.contacts) {
-//   //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-//   //   }
-//   // }
-
-//   render() {
-//     // const { images } = this.state;
-
-//     // const filteredContacts = this.getVisibleContactsSortByName();
-
-//     return (
-//       <Layout>
-//         <Searchbar />
-
-//         <ImageGallery />
-
-//         {/* {images.length === 0 ? (
-//           <p>...</p>
-//         ) : (
-//           <Button onLoadMore={this.loadMore} />
-//         )} */}
-
-//         {/* {images.length > 0 && <Button onLoadMore={this.loadMore} />} */}
-
-//         <Button />
-//         <Loader
-//           type="Puff"
-//           color="#00BFFF"
-//           height={100}
-//           width={100}
-//           timeout={3000} //3 secs
-//         />
-
-//         <Modal />
-//       </Layout>
-//     );
-//   }
-// }
-
-const App = () => {
-  return (
-    <Layout>
-      <Searchbar />
-
-      <ImageGallery />
-
-      {/* {images.length === 0 ? (
+        {/* {images.length === 0 ? (
           <p>...</p>
         ) : (
           <Button onLoadMore={this.loadMore} />
         )} */}
 
-      {/* {images.length > 0 && <Button onLoadMore={this.loadMore} />} */}
+        {/* {images.length > 0 && <Button onLoadMore={this.loadMore} />} */}
 
-      <Button />
-      <Loader
-        type="Puff"
-        color="#00BFFF"
-        height={100}
-        width={100}
-        timeout={3000} //3 secs
-      />
-
-      <Modal />
-    </Layout>
-  );
-};
+        {/* <Button />
+        <Loader
+          type="Puff"
+          color="#00BFFF"
+          height={100}
+          width={100}
+          timeout={3000} //3 secs
+        /> */}
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <img src={largeImageURL} alt="" />
+            <ButtonIcon
+              className={styles.ButtonIcon}
+              onClick={this.toggleModal}
+              aria-label="Close image"
+            >
+              <HiOutlineX />
+            </ButtonIcon>
+          </Modal>
+        )}
+      </Layout>
+    );
+  }
+}
 
 export default App;
