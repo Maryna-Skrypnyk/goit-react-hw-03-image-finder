@@ -6,22 +6,30 @@ import PropTypes from 'prop-types';
 
 import styles from './ImageGallery.module.scss';
 
-const ImageGallery = ({ images }) => {
-  <ul className={styles.ImageGallery}>
-    {images.map(({ id, image, onClickItem }) => (
-      <ImageGalleryItem key={id} image={image} onClick={onClickItem} />
-    ))}
-  </ul>;
+const ImageGallery = ({ images, onClickImg }) => {
+  return (
+    <ul className={styles.ImageGallery}>
+      {images.map(({ id, webformatURL, tags, largeImageURL }) => (
+        <ImageGalleryItem
+          key={id}
+          webformatURL={webformatURL}
+          tags={tags}
+          onClickImg={onClickImg}
+          largeImageURL={largeImageURL}
+        />
+      ))}
+    </ul>
+  );
 };
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      //   image: PropTypes.string.isRequired,
-      onClickItem: PropTypes.func.isRequired,
+      id: PropTypes.number.isRequired,
+      // image: PropTypes.string.isRequired,
     }),
   ).isRequired,
+  onClickImg: PropTypes.func.isRequired,
 };
 
 export default ImageGallery;

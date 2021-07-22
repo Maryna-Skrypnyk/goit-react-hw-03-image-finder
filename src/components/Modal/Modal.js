@@ -25,9 +25,21 @@ class Modal extends Component {
   }
 
   handleKeyDown = e => {
-    if (e.code === 'Escape') {
+    const ESC_KEY_CODE = 'Escape';
+    // const ARROW_LEFT_KEY_CODE = 'ArrowLeft';
+    // const ARROW_RIGHT_KEY_CODE = 'ArrowRight';
+
+    if (e.code === ESC_KEY_CODE) {
       this.props.onClose();
     }
+
+    // if (e.code === ARROW_LEFT_KEY_CODE) {
+    //   this.props.lightboxImageMove(-1);
+    // }
+
+    // if (e.code === ARROW_RIGHT_KEY_CODE) {
+    //   this.props.lightboxImageMove(1);
+    // }
   };
 
   handleEventOverlay = e => {
@@ -37,14 +49,11 @@ class Modal extends Component {
   };
 
   render() {
-    // const { largeImageURL } = this.state;
+    const { children } = this.props;
 
     return createPortal(
       <div className={styles.Overlay} onClick={this.handleEventOverlay}>
-        <div className={styles.Modal}>
-          {this.props.children}
-          {/* <img src={largeImage} alt="" /> */}
-        </div>
+        <div className={styles.Modal}>{children}</div>
       </div>,
       modalRoot,
     );
