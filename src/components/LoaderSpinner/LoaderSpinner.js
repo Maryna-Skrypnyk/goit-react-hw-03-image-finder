@@ -4,13 +4,7 @@ import styles from './LoaderSpinner.module.scss';
 
 const LoaderSpinner = () => (
   <div className={styles.LoaderSpinner}>
-    <Loader
-      type="Watch"
-      color="#00BFFF"
-      height={100}
-      width={100}
-      timeout={0} //3 secs
-    />
+    <Loader type="Watch" color="#00BFFF" height={200} width={200} timeout={0} />
   </div>
 );
 

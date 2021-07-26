@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { toast, Zoom } from 'react-toastify';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import ButtonIcon from '../ButtonIcon';
@@ -7,69 +6,62 @@ import { HiOutlineSearch } from 'react-icons/hi';
 
 import styles from './Searchbar.module.scss';
 
-// const INITIAL_STATE = {
-//   searchQuery: '',
+const Searchbar = ({ handleSubmit, handleChange, searchQuery }) => {
+  return (
+    <header className={styles.Searchbar}>
+      <form className={styles.SearchForm} onSubmit={handleSubmit}>
+        <ButtonIcon type="submit" aria-label="Search images">
+          <HiOutlineSearch />
+        </ButtonIcon>
+
+        <input
+          className={styles.SearchFormInput}
+          type="text"
+          value={searchQuery}
+          onChange={handleChange}
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
+  );
+};
+
+Searchbar.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  searchQuery: PropTypes.string.isRequired,
+};
+
+// handleChange = e => {
+//   const { value } = e.target;
+//   this.setState({ searchQuery: value.toLowerCase() });
 // };
 
-class Searchbar extends Component {
-  static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
-  };
+// handleSubmit = e => {
+//   e.preventDefault();
 
-  state = {
-    searchQuery: '',
-  };
+//   const { searchQuery } = this.state;
 
-  handleChange = e => {
-    const { value } = e.target;
-    this.setState({ searchQuery: value.toLowerCase() });
-  };
+//   if (searchQuery.trim() === '') {
+//     return toast.warn('Enter your request', {
+//       position: 'top-center',
+//       transition: Zoom,
+//       style: { top: 60, textAlign: 'center' },
+//     });
+//   }
 
-  handleSubmit = e => {
-    e.preventDefault();
+//   this.props.onSubmit(searchQuery);
 
-    const { searchQuery } = this.state;
+//   // this.reset();
+// };
 
-    if (searchQuery.trim() === '') {
-      return toast.warn('Enter your request', {
-        position: 'top-center',
-        transition: Zoom,
-        style: { top: 60, textAlign: 'center' },
-      });
-    }
+// reset = () => {
+//   this.setState({ searchQuery: '' });
+// };
 
-    this.props.onSubmit(searchQuery);
-
-    // this.reset();
-  };
-
-  reset = () => {
-    this.setState({ searchQuery: '' });
-  };
-
-  render() {
-    const { searchQuery } = this.state;
-
-    return (
-      <header className={styles.Searchbar}>
-        <form className={styles.SearchForm} onSubmit={this.handleSubmit}>
-          <ButtonIcon type="submit" aria-label="Search images">
-            <HiOutlineSearch />
-          </ButtonIcon>
-
-          <input
-            className={styles.SearchFormInput}
-            type="text"
-            value={searchQuery}
-            onChange={this.handleChange}
-            // autocomplete="off"
-            // autofocus
-            placeholder="Search images and photos"
-          />
-        </form>
-      </header>
-    );
-  }
-}
+// render() {
+//   const { searchQuery } = this.state;
 
 export default Searchbar;

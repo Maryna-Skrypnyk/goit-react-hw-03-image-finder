@@ -1,22 +1,18 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import imagesAPI from '../api/images-api';
 
-import { ToastContainer, toast, Zoom } from 'react-toastify';
-
-import Layout from '../components/Layout';
+import Layout from './Layout';
 import Searchbar from './Searchbar';
 import ImageGallery from './ImageGallery';
+import Button from './Button';
 import LoaderSpinner from './LoaderSpinner';
 import Modal from './Modal';
+import Error from './Error';
+
 import ButtonIcon from './ButtonIcon';
 import { HiOutlineX } from 'react-icons/hi';
-import Button from './Button';
-
 import { animateScroll as scroll } from 'react-scroll';
-
-// import PropTypes from 'prop-types';
-
+import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import styles from './App.module.scss';
@@ -24,85 +20,85 @@ import styles from './App.module.scss';
 class App extends Component {
   state = {
     images: [],
-    loading: false,
+    imagesPageList: [],
     searchQuery: '',
+    loading: false,
     page: 1,
     largeImageURL: '',
     tags: '',
     showModal: false,
     error: null,
-    // status: 'idle',
-    message: '',
   };
-
-  // componentDidMount() {
-  //   (async () => {
-  //     try {
-  //       this.setState({ loading: true });
-  //       const imagesList = await imagesAPI
-  //         .fetchImages
-  //         // this.state.searchQuery,
-  //         // this.state.page,
-  //         ();
-  //       this.setState({ images: imagesList, loading: false });
-  //     } catch (error) {
-  //       this.setState({ error: 'error', loading: false });
-  //     }
-  //   })();
-  // }
-
-  // componentDidMount() {
-  //   this.setState({ loading: true });
-  //   imagesAPI
-  //     .fetchImages()
-  //     .then(response => {
-  //       this.setState({ images: response.data.hits });
-  //     })
-  //     .catch(error => this.setState({ error }))
-  //     .finally(() => this.setState({ loading: false }));
-  // }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
-      this.setState({ images: [], page: 0, error: null });
-      this.renderImagesList();
+      this.setState({ images: [], page: 1, error: null, imagesPageList: [] });
     }
   }
+
+  handleChange = e => {
+    const { value } = e.target;
+    this.setState({ searchQuery: value.toLowerCase() });
+  };
+
+  handleSearchSubmit = e => {
+    e.preventDefault();
+
+    const { searchQuery } = this.state;
+
+    if (searchQuery.trim() === '') {
+      return toast.warn('Enter your request', {
+        position: 'top-center',
+        transition: Zoom,
+        style: { top: 60, textAlign: 'center' },
+      });
+    }
+
+    this.renderImagesList();
+  };
 
   renderImagesList = async () => {
     const { searchQuery, page } = this.state;
 
     try {
       this.setState({ loading: true });
-      const imagesList = await imagesAPI.fetchImages(searchQuery, page);
+      const imagesPageList = await imagesAPI.fetchImages(searchQuery, page);
+      this.setState({ imagesPageList });
 
-      this.setState(({ images, page }) => ({
-        images: [...images, ...imagesList],
+      this.setState(({ images, page, imagesPageList }) => ({
+        images: [...images, ...imagesPageList],
         page: page + 1,
         loading: false,
+        imagesPageList: [...imagesPageList],
       }));
 
-      if (imagesList.length === 0) {
-        return toast.warn('There are no images on request', {
-          position: 'top-center',
-          transition: Zoom,
-          style: { top: 60, textAlign: 'center' },
-        });
+      if (imagesPageList.length === 0) {
+        this.setState(({ page }) => ({
+          page: page - 1,
+          error: `There are no images on your request "${searchQuery}"`,
+        }));
       }
     } catch (error) {
       this.setState({
         error: 'Whoops, something went wrong. Enter your request again',
-        loading: false,
       });
+    } finally {
+      this.setState({ loading: false });
+      // this.scroll();
     }
+  };
+
+  loadMore = () => {
+    this.renderImagesList();
+    this.scroll();
   };
 
   scroll = () => {
     scroll.scrollToBottom();
-  };
-
-  handleSearchSubmit = searchQuery => {
-    this.setState({ searchQuery });
+    // window.scrollTo({
+    //   top: document.documentElement.scrollHeight,
+    //   behavior: 'smooth',
+    // });
   };
 
   toggleModal = () => {
@@ -111,32 +107,55 @@ class App extends Component {
     }));
   };
 
-  loadMore = () => {
-    // const { page } = this.state;
-    // this.setState({ page: page + 1 });
-    this.renderImagesList();
-    this.scroll();
+  onOpenModal = e => {
+    this.setState({
+      largeImageURL: e.target.dataset.source,
+      tags: e.target.alt,
+    });
+    this.toggleModal();
+  };
+
+  disabledBtn = () => {
+    this.setState(({ disabled }) => ({
+      disabled: !disabled,
+    }));
   };
 
   render() {
-    const { images, tags, largeImageURL, showModal, loading, error } =
-      this.state;
+    const {
+      images,
+      searchQuery,
+      tags,
+      largeImageURL,
+      showModal,
+      loading,
+      error,
+      imagesPageList,
+    } = this.state;
 
     return (
       <Layout>
-        <Searchbar onSubmit={this.handleSearchSubmit} />
-        {error && <p>Whoops, something went wrong: {error.message}</p>}
+        <Searchbar
+          searchQuery={searchQuery}
+          handleChange={this.handleChange}
+          handleSubmit={this.handleSearchSubmit}
+        />
+
+        {error && <Error errorContent={error} />}
+
         {loading && <LoaderSpinner />}
+
         {images.length > 0 && !error && (
-          <ImageGallery images={images} onClickImg={this.toggleModal} />
+          <ImageGallery images={images} onClickImg={this.onOpenModal} />
         )}
 
-        {images.length > 11 && !error && <Button onLoadMore={this.loadMore} />}
-
-        {/* <Button onLoadMore={this.loadMore} /> */}
-
-        {images.length === 0 && <h1>{this.state.message}</h1>}
-        {/* <h1>{this.state.message}</h1> */}
+        {imagesPageList.length > 11 && !loading && !error && (
+          <Button contentBtn="Load More" onLoadMore={this.loadMore} />
+        )}
+        {imagesPageList.length < 11 &&
+          imagesPageList.length > 0 &&
+          !loading &&
+          !error && <Button disabled contentBtn="End" />}
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
