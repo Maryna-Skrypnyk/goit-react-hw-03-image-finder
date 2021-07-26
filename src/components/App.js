@@ -50,7 +50,12 @@ class App extends Component {
       return toast.warn('Enter your request', {
         position: 'top-center',
         transition: Zoom,
-        style: { top: 60, textAlign: 'center' },
+        style: {
+          top: 80,
+          textAlign: 'center',
+          width: 290,
+          margin: '0 auto',
+        },
       });
     }
 

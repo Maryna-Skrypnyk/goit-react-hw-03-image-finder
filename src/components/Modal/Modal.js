@@ -12,10 +12,6 @@ class Modal extends Component {
     onClose: PropTypes.func.isRequired,
   };
 
-  // state = {
-  //   largeImageURL: '',
-  // };
-
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }

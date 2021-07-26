@@ -34,34 +34,4 @@ Searchbar.propTypes = {
   searchQuery: PropTypes.string.isRequired,
 };
 
-// handleChange = e => {
-//   const { value } = e.target;
-//   this.setState({ searchQuery: value.toLowerCase() });
-// };
-
-// handleSubmit = e => {
-//   e.preventDefault();
-
-//   const { searchQuery } = this.state;
-
-//   if (searchQuery.trim() === '') {
-//     return toast.warn('Enter your request', {
-//       position: 'top-center',
-//       transition: Zoom,
-//       style: { top: 60, textAlign: 'center' },
-//     });
-//   }
-
-//   this.props.onSubmit(searchQuery);
-
-//   // this.reset();
-// };
-
-// reset = () => {
-//   this.setState({ searchQuery: '' });
-// };
-
-// render() {
-//   const { searchQuery } = this.state;
-
 export default Searchbar;
