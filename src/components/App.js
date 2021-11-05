@@ -7,6 +7,7 @@ import ImageGallery from './ImageGallery';
 import Button from './Button';
 import LoaderSpinner from './LoaderSpinner';
 import Modal from './Modal';
+import LargeImg from './LargeImg';
 import Error from './Error';
 
 import ButtonIcon from './ButtonIcon';
@@ -164,7 +165,7 @@ class App extends Component {
 
         {showModal && (
           <Modal onClose={this.toggleModal}>
-            <img src={largeImageURL} alt={tags} />
+            <LargeImg largeImageURL={largeImageURL} tags={tags} />
             <ButtonIcon
               className={styles.ButtonIcon}
               onClick={this.toggleModal}

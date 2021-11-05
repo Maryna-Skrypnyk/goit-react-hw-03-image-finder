@@ -6,7 +6,7 @@
 
 Создай компоненты `<Searchbar>`, `<ImageGallery>`, `<ImageGalleryItem>`,
 `<Loader>`, `<Button>` и `<Modal>`. Готовые стили компонентов можно взять в
-файле [styles.css](./src/index.css) и подправить под себя, если необходимо.
+файле [index.css](./src/index.css) и подправить под себя, если необходимо.
 
 ![preview](./mockup/preview.jpg)
 
